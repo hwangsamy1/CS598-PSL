@@ -21,7 +21,7 @@ for i in directories:
       rf_y_all = pd.merge(test_y, output_rf, on="PID", how='outer')
 
 
-      # Step 3: Report RMSE for each model
+      # Step 4: Report RMSE for each model
       rmse_lasso = root_mean_squared_error(lasso_y_all["Sale_Price_x"], lasso_y_all["Sale_Price_y"])
       rmse_rf = root_mean_squared_error(rf_y_all["Sale_Price_x"], rf_y_all["Sale_Price_y"])
 
