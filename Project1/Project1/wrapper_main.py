@@ -14,13 +14,16 @@ for i in directories:
       process = subprocess.run(["python", script_path])
 
       test_y = pd.read_csv("test_y.csv")
-      test_y = np.log(test_y)
       output_lasso = pd.read_csv("mysubmission1.txt")
       output_rf = pd.read_csv("mysubmission2.txt")
 
+      lasso_y_all = pd.merge(test_y, output_lasso, on="PID", how='outer')
+      rf_y_all = pd.merge(test_y, output_rf, on="PID", how='outer')
+
+
       # Step 3: Report RMSE for each model
-      rmse_lasso = root_mean_squared_error(test_y, output_lasso)
-      rmse_rf = root_mean_squared_error(test_y, output_rf)
+      rmse_lasso = root_mean_squared_error(lasso_y_all["Sale_Price_x"], lasso_y_all["Sale_Price_y"])
+      rmse_rf = root_mean_squared_error(rf_y_all["Sale_Price_x"], rf_y_all["Sale_Price_y"])
 
       print(f"RMSE for Lasso Model: {rmse_lasso}")
       print(f"RMSE for Random Forest Model: {rmse_rf}")
