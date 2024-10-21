@@ -3,11 +3,14 @@ import subprocess
 import pandas as pd
 import numpy as np
 from sklearn.metrics import mean_squared_error, root_mean_squared_error
+import time
 
 script_path = os.path.abspath("mymain.py")
 
 directory_to_check = os.getcwd()
 directories = [os.path.abspath(x[0]) for x in os.walk(directory_to_check) if "fold" in x[0]]
+
+start = time.process_time_ns()
 
 for i in directories:
       os.chdir(i)         # Change working Directory
@@ -29,3 +32,6 @@ for i in directories:
       print(os.path.split(os.getcwd())[1])
       print(f"   RMSE for Lasso: {rmse_lasso}")
       print(f"   RMSE for XGBoost: {rmse_rf}")
+
+end = time.process_time_ns()
+print("Elapsed time during the whole program in seconds: ", (end - start)/pow(10, 6))
