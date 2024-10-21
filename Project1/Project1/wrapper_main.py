@@ -27,5 +27,5 @@ for i in directories:
       rmse_rf = root_mean_squared_error(rf_y_all["Sale_Price_x"], rf_y_all["Sale_Price_y"])
 
       print(os.path.split(os.getcwd())[1])
-      print(f"   RMSE for Lasso Model: {rmse_lasso}")
-      print(f"   RMSE for Random Forest Model: {rmse_rf}")
+      print(f"   RMSE for Lasso: {rmse_lasso}")
+      print(f"   RMSE for XGBoost: {rmse_rf}")
