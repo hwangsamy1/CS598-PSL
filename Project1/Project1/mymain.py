@@ -27,7 +27,7 @@ def preprocess_regression_train(x_data):
 
     # Method 2: Winsorization of numerical features
     for feat in winsorize_arr:
-        x_data[feat] = winsorize(x_data[feat], limits=[0.01, 0.01])
+        x_data[feat] = winsorize(x_data[feat], limits=[0.01, 0.03])
 
     # Method 3: One-hot encode categorical features
     categorical_columns = x_data.select_dtypes(include=['object']).columns.tolist()
@@ -53,7 +53,7 @@ def preprocess_regression_test(x_data, encoder, scaler):
 
     # Method 2: Winsorization of numerical features
     for feat in winsorize_arr:
-        x_data[feat] = winsorize(x_data[feat], limits=[0.01, 0.01])
+        x_data[feat] = winsorize(x_data[feat], limits=[0.01, 0.03])
 
     # Method 3: One-hot encode categorical features
     categorical_columns = x_data.select_dtypes(include=['object']).columns.tolist()
@@ -76,7 +76,7 @@ def preprocess_tree_train(x_data):
 
     # Method 2: Winsorization of numerical features
     for feat in winsorize_arr:
-        x_data[feat] = winsorize(x_data[feat], limits=[0.05, 0.05])
+        x_data[feat] = winsorize(x_data[feat], limits=[0.01, 0.01])
 
     # Method 3: One-hot encode categorical features
     categorical_columns = x_data.select_dtypes(include=['object']).columns.tolist()
@@ -102,7 +102,7 @@ def preprocess_tree_test(x_data, encoder, scaler):
 
     # Method 2: Winsorization of numerical features
     for feat in winsorize_arr:
-        x_data[feat] = winsorize(x_data[feat], limits=[0.05, 0.05])
+        x_data[feat] = winsorize(x_data[feat], limits=[0.01, 0.01])
 
     # Method 3: One-hot encode categorical features
     categorical_columns = x_data.select_dtypes(include=['object']).columns.tolist()
