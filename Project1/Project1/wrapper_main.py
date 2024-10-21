@@ -14,6 +14,7 @@ for i in directories:
       process = subprocess.run(["python", script_path])
 
       test_y = pd.read_csv("test_y.csv")
+      test_y["Sale_Price"] = np.log(test_y["Sale_Price"])
       output_lasso = pd.read_csv("mysubmission1.txt")
       output_rf = pd.read_csv("mysubmission2.txt")
 
