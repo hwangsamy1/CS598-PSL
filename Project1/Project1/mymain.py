@@ -2,8 +2,7 @@ import numpy as np
 import pandas as pd
 from scipy.stats.mstats import winsorize
 from sklearn.linear_model import LassoCV, Lasso
-from sklearn.ensemble import RandomForestRegressor
-from sklearn.preprocessing import OneHotEncoder, StandardScaler, LabelEncoder
+from sklearn.preprocessing import OneHotEncoder, StandardScaler
 import xgboost as xgb
 from xgboost import XGBClassifier
 import random
@@ -147,8 +146,6 @@ Y_train = np.log(train["Sale_Price"])
 X_train, encoder, scaler = preprocess_tree_train(train)
 
 # Step 2B: Fit tree model (randomForest or boosting tree)
-#rf_model = RandomForestRegressor(n_estimators=200, max_depth=10, random_state=42)
-#rf_model.fit(X_train, Y_train)
 xg_model = xgb.XGBRegressor(n_estimators=6000, max_depth=6,
                             eta=0.05, subsample=0.5)
 xg_model.fit(X_train, Y_train)
@@ -158,7 +155,6 @@ test = pd.read_csv("test.csv")
 X_test = preprocess_tree_test(test, encoder, scaler)
 
 # Step 2D: Generate the tree predictions
-#reds_rf = rf_model.predict(X_test)
 preds_xg = xg_model.predict(X_test)
 
 # Step 2E: Save tree prediction to file

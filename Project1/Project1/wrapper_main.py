@@ -10,11 +10,14 @@ script_path = os.path.abspath("mymain.py")
 directory_to_check = os.getcwd()
 directories = [os.path.abspath(x[0]) for x in os.walk(directory_to_check) if "fold" in x[0]]
 
-start = time.process_time_ns()
-
 for i in directories:
       os.chdir(i)         # Change working Directory
+
+      start = time.process_time_ns()
+
       process = subprocess.run(["python", script_path])
+
+      end = time.process_time_ns()
 
       test_y = pd.read_csv("test_y.csv")
       test_y["Sale_Price"] = np.log(test_y["Sale_Price"])
@@ -32,6 +35,6 @@ for i in directories:
       print(os.path.split(os.getcwd())[1])
       print(f"   RMSE for Lasso: {rmse_lasso}")
       print(f"   RMSE for XGBoost: {rmse_rf}")
+      print(f"   Running time in seconds: ", (end - start) / pow(10, 6))
 
-end = time.process_time_ns()
-print("Elapsed time during the whole program in seconds: ", (end - start)/pow(10, 6))
+
