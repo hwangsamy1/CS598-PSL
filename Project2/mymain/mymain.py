@@ -20,6 +20,7 @@ def preprocess(data):
 
 
 # What have we tried (III)
+
 def svd(train_data, d=5):
     # some random value
     final_data = []
@@ -30,7 +31,7 @@ def svd(train_data, d=5):
         filtered_train = train_data[train_data['Dept'] == dept]
 
         selected_columns = filtered_train[['Store', 'Date', 'Weekly_Sales']]
-        train_dept_ts = selected_columns.pivot(index='Store', columns='Date', values='Weekly_Sales').reset_index()
+        train_dept_ts = selected_columns.pivot(index='Date', columns='Store', values='Weekly_Sales').reset_index()
 
         # Replace all missing values with zero
         X_train = train_dept_ts.iloc[:, 1:]
@@ -50,14 +51,16 @@ def svd(train_data, d=5):
         # Make a reduced rank (smoothed) version of the original dataset
         X_bar = (U @ np.diag(D) @ VT) + store_mean
 
-        # need to add some logic to rebuild the train data with column labels and such
-        # concat it into final_data
-        reconstructed = pd.DataFrame(X_bar, columns=train_dept_ts.columns[1:], index=train_dept_ts['Store'])
-        reconstructed = reconstructed.reset_index().melt(id_vars=['Store'], var_name='Date', value_name='Weekly_Sales')
+        stores_list = train_dept_ts.columns[1:]
+        stores_df = pd.DataFrame(X_bar, columns=stores_list)
+        stores_df["Date"] = train_dept_ts["Date"]
+
+        reconstructed = pd.melt(stores_df, id_vars=['Date'], var_name='Store', value_name='Weekly_Sales',
+                                value_vars=stores_list)
         reconstructed['Dept'] = dept
+        reconstructed["Store"] = reconstructed["Store"].astype(np.int64)
 
         final_data.append(reconstructed)
-
     return pd.concat(final_data, ignore_index=True)
 
 
@@ -130,8 +133,9 @@ def apply_shift(data, shift=1, threshold=1.1):
 
 
 def process(train_file_path='train.csv', test_file_path='test.csv', pred_file_path='mypred.csv'):
+    start_time = time.time()
+
     # Load data
-    print(train_file_path)
     train = pd.read_csv(train_file_path)
     test = pd.read_csv(test_file_path)
 
@@ -216,5 +220,9 @@ def process(train_file_path='train.csv', test_file_path='test.csv', pred_file_pa
 
     # Export results
     result.to_csv(pred_file_path, index=False)
+    end_time = time.time()
+    print(pred_file_path)
+    print(f"Execution time: {end_time - start_time:.4f} seconds")
+
 
 process()
