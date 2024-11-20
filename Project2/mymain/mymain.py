@@ -7,6 +7,7 @@ import sklearn as sk
 import statsmodels.api as sm
 import patsy
 import warnings
+import time
 # Suppress all warnings
 warnings.filterwarnings("ignore")
 
@@ -19,7 +20,6 @@ def preprocess(data):
 
 
 # What have we tried (III)
-
 def svd(train_data, d=5):
     # some random value
     final_data = []
@@ -129,8 +129,9 @@ def apply_shift(data, shift=1, threshold=1.1):
     return data
 
 
-def process(train_file_path = 'train.csv', test_file_path = 'test.csv', pred_file_path = 'mypred.csv'):
+def process(train_file_path='train.csv', test_file_path='test.csv', pred_file_path='mypred.csv'):
     # Load data
+    print(train_file_path)
     train = pd.read_csv(train_file_path)
     test = pd.read_csv(test_file_path)
 
