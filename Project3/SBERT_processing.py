@@ -18,6 +18,7 @@ Y_embeddings = test.iloc[:, 2:]
 model = LinearRegression()
 model.fit(X_embeddings, Y_embeddings)
 W_optimal = model.coef_
+
 intercept = model.intercept_
 
 print("Optimal weights (W):", W_optimal)
@@ -26,9 +27,9 @@ print("Intercept (bias):", intercept)
 print("X shape: ", X_embeddings.shape)
 print("W shape: ", W_optimal.shape)
 
-Y_approx_embeddings = X_embeddings.dot(W_optimal.T) + model.intercept_
-Y_out = pd.DataFrame(Y_approx_embeddings)
+Y_approx_embeddings = X_embeddings @ W_optimal + model.intercept_
 
-final = pd.concat([test_idandreview['id'], Y_out], axis=1)
+print(Y_approx_embeddings)
+final = pd.concat([test_idandreview, Y_approx_embeddings], axis=1)
 
-final.to_csv('SBERT_embeddings_id.csv', index=False)
+final.to_csv('SBERT_embeddings.csv', index=False)
