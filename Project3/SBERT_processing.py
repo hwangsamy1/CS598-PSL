@@ -29,9 +29,18 @@ print("Intercept (bias):", intercept)
 print("X shape: ", X_embeddings.shape)
 print("W shape: ", W_optimal.shape)
 
+<<<<<<< HEAD
 Y_approx_embeddings = np.dot(X_embeddings, W_optimal.T) + model.intercept_
 
 print(Y_approx_embeddings)
 final = pd.concat([test_id, pd.DataFrame(Y_approx_embeddings)], axis=1)
 
 final.to_csv('SBERT_embeddings_whole_review.csv', index=False)
+=======
+Y_approx_embeddings = X_embeddings @ W_optimal + model.intercept_
+
+print(Y_approx_embeddings)
+final = pd.concat([test_idandreview, Y_approx_embeddings], axis=1)
+
+final.to_csv('SBERT_embeddings.csv', index=False)
+>>>>>>> parent of 52177d1 (SBERT script and embedding data)
