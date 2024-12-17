@@ -7,7 +7,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 @st.cache_data
 def load_data():
     # Load the rating matrix and similarity matrix
-    url = 'https://raw.githubusercontent.com/hwangsamy1/CS598-PSL/refs/heads/main/Project%204/S100.csv'
+    url = 'https://raw.githubusercontent.com/hwangsamy1/CS598-PSL/refs/heads/main/Project4/S100.csv'
     rating_matrix = pd.read_csv(url, index_col=0)
     similarity_matrix = pd.read_csv("similarity_matrix.csv", index_col=0)
     return rating_matrix, similarity_matrix
