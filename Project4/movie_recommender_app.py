@@ -8,43 +8,50 @@ import numpy as np
 
 # Recommendation function
 def myIBCF(new_user_ratings):
+    # Load top 30 similarity matrix data
     similarity_url = "https://raw.githubusercontent.com/hwangsamy1/CS598-PSL/refs/heads/main/Project4/similarity_matrix_top30.csv"
     similarity_matrix = pd.read_csv(similarity_url, index_col=0)
     predictions = {}
 
+    # Predict the ratings for movies not rated by user
     for movie in similarity_matrix.index:
         if pd.isna(new_user_ratings[movie]):
             related_movies = similarity_matrix.loc[movie].dropna()
             rated_movies = new_user_ratings[~new_user_ratings.isna()]
             relevant_movies = related_movies.index.intersection(rated_movies.index)
-
+            
             if relevant_movies.any():
                 weights = related_movies.loc[relevant_movies]
                 ratings = rated_movies.loc[relevant_movies]
                 prediction = (weights * ratings).sum() / weights.sum()
                 predictions[movie] = prediction
-
+    
     # Sort by predicted ratings
     sorted_predictions = sorted(predictions.items(), key=lambda x: x[1], reverse=True)
     predictions_top10_vals = np.array([val for movie, val in sorted_predictions[:10]])
     predictions_top10_movies = np.array([movie for movie, val in sorted_predictions[:10]])
 
     notna_count = np.count_nonzero(np.isnan(predictions_top10_vals))
+    
     if predictions_top10_vals.size == 0:
         notna_count = 10
-
+        
     if notna_count > 0:
+        # Load popularity rankings
         popularity_ranks_url = "https://raw.githubusercontent.com/hwangsamy1/CS598-PSL/refs/heads/main/Project4/all_popular_ranking.csv"
         popularity_ranks = pd.read_csv(popularity_ranks_url, index_col=0)
 
+        # Mask movies already in top predictions
         mask = ~np.isin(popularity_ranks, predictions_top10_movies)
         popular_noranked = popularity_ranks[mask]
         remaining_movies = popular_noranked[:notna_count].to_numpy().flatten()
 
+        print(remaining_movies)
+        # Merge predictions
         new_predictions = np.full(10, '', dtype='<U10')
         new_predictions[:len(predictions_top10_movies)] = predictions_top10_movies
 
-        new_predictions[(10 - notna_count):] = remaining_movies
+        new_predictions[(10-notna_count):] = remaining_movies
         return new_predictions
 
     return predictions_top10_movies
